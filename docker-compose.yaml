@@ -1,11 +1,23 @@
 services:
+  db:
+    image: postgres:16
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   api:
-    build: ./api        
+    build: ./api
     ports:
       - "8000:8000"
     volumes:
       - ./api:/api
-    command: bash -c "python manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
 
   web:
     build: ./frontend
@@ -13,3 +25,10 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/frontend
+    command: >
+      sh -c "
+      npm install;
+      npm start"
+
+volumes:
+  postgres_data:

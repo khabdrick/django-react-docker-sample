@@ -7,6 +7,6 @@ WORKDIR /api
 
 COPY . .
 
-RUN pip install django django-cors-headers
+RUN pip install django==4.0.0 django-cors-headers==3.13.0 psycopg2-binary==2.9.5
 
 EXPOSE 8000
